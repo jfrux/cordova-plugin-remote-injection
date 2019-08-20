@@ -134,9 +134,11 @@ public class RemoteInjectionPlugin extends CordovaPlugin {
         // (https://developer.mozilla.org/en-US/docs/Web/HTTP/data_URIs).  The script tag
         // is appended to the DOM and executed via a javascript URL (e.g. javascript:doJsStuff()).
         StringBuilder jsToInject = new StringBuilder();
+        jsToInject.append("try { ");
         for (String path: jsPaths) {
             jsToInject.append(readFile(cordova.getActivity().getResources().getAssets(), path));
         }
+        jsToInject.append("} catch (e) { console.warn('cordova already injected',e); }");
         String jsUrl = "javascript:var script = document.createElement('script');";
         jsUrl += "script.src=\"data:text/javascript;charset=utf-8;base64,";
 
